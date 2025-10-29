@@ -1,0 +1,31 @@
+/* styles/Gallery.css */
+
+/* Heading for the Gallery page */
+.title {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* Grid layout for gallery */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+/* Gallery images */
+.gallery-img {
+  width: 250px;
+  height: 180px;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: transform 0.2s;
+}
+
+.gallery-img:hover {
+  transform: scale(1.05);
+}

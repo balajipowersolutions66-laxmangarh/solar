@@ -1,0 +1,269 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --- THEME COLORS --- */
+:root {
+  --emerald: #065f46;
+  --parrot: #a3e635;
+  --pearl: #f8faf9;
+  --yellow: #facc15;
+}
+
+/* --- HERO SECTION --- */
+.hero-container {
+  height: 85vh;
+  position: relative;
+  overflow: hidden;
+  background: #000;
+}
+
+/* ✅ Hero background images (no flicker, no gray) */
+.hero-img {
+  width: 100%;
+  height: 85vh;
+  object-fit: cover;
+  opacity: 1 !important;
+  animation: heroZoom 20s ease-in-out infinite;
+  transition: transform 1.5s ease, filter 1.5s ease;
+  filter: brightness(1) saturate(1.05);
+}
+
+/* ✅ Gentle zoom animation */
+@keyframes heroZoom {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Top title (Shri Balaji Power Solutions) */
+.hero-title-top {
+  position: absolute;
+  top: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 10;
+}
+
+.hero-title-top h1 {
+  color: white;
+  font-weight: 900;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
+  letter-spacing: 0.5px;
+}
+
+.hero-title-top p {
+  color: var(--parrot);
+  font-weight: 700;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+}
+
+/* Bottom slider & quote tab */
+.hero-bottom {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  z-index: 10;
+}
+
+/* ✅ Slider text styling */
+.hero-slider-text {
+  color: var(--parrot);
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  font-size: clamp(1rem, 2vw, 1.4rem);
+}
+
+/* ✅ Get Quote Button */
+.hero-quote-btn {
+  background: var(--emerald);
+  color: white;
+  padding: 12px 28px;
+  border-radius: 9999px;
+  font-weight: 700;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+.hero-quote-btn:hover {
+  background: var(--parrot);
+  color: black;
+  transform: scale(1.05);
+}
+
+/* --- GENERAL SECTIONS --- */
+.section-heading {
+  color: var(--emerald);
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+}
+
+.bg-pearl {
+  background-color: var(--pearl);
+}
+
+.text-emerald {
+  color: var(--emerald);
+}
+
+/* Cards, logos, etc. */
+.card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.h-14 {
+  filter: saturate(1.1);
+  opacity: 0.95;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .hero-container {
+    height: 70vh;
+  }
+  .hero-img {
+    height: 70vh;
+  }
+  .hero-title-top h1 {
+    font-size: 1.8rem;
+  }
+  .hero-title-top p {
+    font-size: 1rem;
+  }
+}
+
+/* --- GLOW EFFECT FOR QUOTE BUTTON --- */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.7), 0 0 20px rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(34, 197, 94, 0.9), 0 0 28px rgba(34, 197, 94, 0.6);
+  }
+}
+
+.animate-pulseGlow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+/* ===========================
+   Appended: Image & sizing fixes
+   (safe; does not change colors / theme)
+   =========================== */
+
+/*
+  Purpose:
+  - Remove "Image with src ... has either width or height modified" console warnings
+  - Ensure hero, brand and testimonial images keep aspect ratio and do not stretch
+  - Provide selectors that apply automatically to images in /brands/ and /testimonials/
+  - Keep your theme, colors and layout intact
+*/
+
+/* Make all images responsive by default and preserve aspect ratio */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  vertical-align: middle;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+/* If an image explicitly sets only width or only height in HTML/CSS,
+   make sure the other dimension is auto so aspect ratio stays correct */
+img[width]:not([height]),
+img[height]:not([width]) {
+  width: auto;
+  height: auto;
+}
+
+/* Specific rule for brand logos inside your public/brands folder
+   These will get a consistent width and keep original aspect ratio */
+img[src*="/brands/"] {
+  width: 120px;          /* change this single number if you want bigger/smaller logos */
+  height: auto;
+  object-fit: contain;   /* contain so logos are fully visible */
+  display: inline-block;
+}
+
+/* Fallback for images that use Tailwind 'h-14' utility on image element */
+img.h-14, .h-14 img {
+  height: 56px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Hero container / images: keep them covering full width but not distorted */
+.hero-container, .hero {
+  width: 100%;
+  overflow: hidden;
+}
+.hero img, .hero-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Testimonial images: small round avatars */
+img[src*="/testimonials/"],
+img.testimonial-avatar,
+.testimonial img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 9999px;
+  display: inline-block;
+}
+
+/* Gallery / project / product images — don't overflow their card */
+.card img, .gallery img, .project img, img.block-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Placeholder image styling if used */
+.placeholder-img, img[src*="placeholder"] {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.98;
+}
+
+/* If your build uses next/image wrapper classes (sometimes rendered as .next-image) */
+.next-img, .next-image, .next-image img {
+  width: 100% !important;
+  height: auto !important;
+  object-fit: cover !important;
+}
+
+/* Buttons/icons containing small inline images (keeps line-height correct) */
+.btn img, .link img {
+  height: 1em;
+  width: auto;
+  vertical-align: -0.125em;
+}
+
+/* Accessibility hint: decorative images without alt should be ignored by AT */
+img[alt=""] {
+  role: presentation;
+}
+
+/* Very small debug helper (uncomment in dev only)
+.img-outline { outline: 1px dashed rgba(255,0,0,0.4); }
+*/
+
+/* End appended image fixes */
