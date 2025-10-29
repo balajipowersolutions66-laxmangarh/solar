@@ -10,6 +10,22 @@
   --yellow: #facc15;
 }
 
+/* Make all images responsive and keep aspect ratio by default.
+   This is safe: it won't change your visual theme or text. */
+img {
+  max-width: 100%;
+  height: auto !important;    /* important to override inline width-only or height-only changes */
+  display: block;
+  object-fit: cover;          /* fallback; many images intentionally use object-fit in layout */
+}
+
+/* Keep Next.js image wrappers from collapsing / causing layout shift */
+img[decoding] {
+  /* next/image outputs an <img decoding="async"> — ensure it behaves */
+  width: auto !important;
+  height: auto !important;
+}
+
 /* --- HERO SECTION --- */
 .hero-container {
   height: 85vh;
@@ -18,7 +34,7 @@
   background: #000;
 }
 
-/* ✅ Hero background images (no flicker, no gray) */
+/* Hero background images — full-width, keep aspect ratio and smooth zoom */
 .hero-img {
   width: 100%;
   height: 85vh;
@@ -29,7 +45,7 @@
   filter: brightness(1) saturate(1.05);
 }
 
-/* ✅ Gentle zoom animation */
+/* Gentle zoom animation */
 @keyframes heroZoom {
   0%, 100% {
     transform: scale(1);
@@ -75,7 +91,7 @@
   z-index: 10;
 }
 
-/* ✅ Slider text styling */
+/* Slider text styling */
 .hero-slider-text {
   color: var(--parrot);
   font-weight: 700;
@@ -83,7 +99,7 @@
   font-size: clamp(1rem, 2vw, 1.4rem);
 }
 
-/* ✅ Get Quote Button */
+/* Get Quote Button */
 .hero-quote-btn {
   background: var(--emerald);
   color: white;
@@ -101,7 +117,40 @@
   transform: scale(1.05);
 }
 
-/* --- GENERAL SECTIONS --- */
+/* --- Logos, brand icons, thumbnails --- */
+/* Many places display small logos; keep their height fixed and width auto to prevent distortion. */
+.brand img,
+.brands img,
+.carousel img,
+.logo img,
+img.brand-logo,
+img.object-contain {
+  height: auto !important;
+  max-height: 60px;      /* keep logos visually small and consistent */
+  width: auto !important;
+  object-fit: contain;
+  display: inline-block;
+}
+
+/* Utility override for classes that were resizing only one dimension */
+.h-14, .h-12, .h-16 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.h-14 img, .h-12 img, .h-16 img {
+  max-height: 56px;
+  width: auto !important;
+}
+
+/* Cards (projects) — keep fixed card height but image inside should keep aspect ratio */
+.card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+/* --- General sections and typography --- */
 .section-heading {
   color: var(--emerald);
   font-weight: 800;
@@ -116,16 +165,12 @@
   color: var(--emerald);
 }
 
-/* Cards, logos, etc. */
-.card img {
-  width: 100%;
-  height: 220px;
+/* --- Prevent flicker on images that are loaded by JS (placeholder fallback) --- */
+img[src$="placeholder.jpg"],
+img[alt="placeholder"] {
   object-fit: cover;
-}
-
-.h-14 {
-  filter: saturate(1.1);
-  opacity: 0.95;
+  width: auto !important;
+  height: auto !important;
 }
 
 /* --- RESPONSIVE --- */
@@ -142,6 +187,11 @@
   .hero-title-top p {
     font-size: 1rem;
   }
+  .brand img,
+  .brands img,
+  img.brand-logo {
+    max-height: 48px;
+  }
 }
 
 /* --- GLOW EFFECT FOR QUOTE BUTTON --- */
@@ -157,113 +207,3 @@
 .animate-pulseGlow {
   animation: pulseGlow 3s ease-in-out infinite;
 }
-
-/* ===========================
-   Appended: Image & sizing fixes
-   (safe; does not change colors / theme)
-   =========================== */
-
-/*
-  Purpose:
-  - Remove "Image with src ... has either width or height modified" console warnings
-  - Ensure hero, brand and testimonial images keep aspect ratio and do not stretch
-  - Provide selectors that apply automatically to images in /brands/ and /testimonials/
-  - Keep your theme, colors and layout intact
-*/
-
-/* Make all images responsive by default and preserve aspect ratio */
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  vertical-align: middle;
-  -o-object-fit: cover;
-  object-fit: cover;
-}
-
-/* If an image explicitly sets only width or only height in HTML/CSS,
-   make sure the other dimension is auto so aspect ratio stays correct */
-img[width]:not([height]),
-img[height]:not([width]) {
-  width: auto;
-  height: auto;
-}
-
-/* Specific rule for brand logos inside your public/brands folder
-   These will get a consistent width and keep original aspect ratio */
-img[src*="/brands/"] {
-  width: 120px;          /* change this single number if you want bigger/smaller logos */
-  height: auto;
-  object-fit: contain;   /* contain so logos are fully visible */
-  display: inline-block;
-}
-
-/* Fallback for images that use Tailwind 'h-14' utility on image element */
-img.h-14, .h-14 img {
-  height: 56px;
-  width: auto;
-  object-fit: contain;
-}
-
-/* Hero container / images: keep them covering full width but not distorted */
-.hero-container, .hero {
-  width: 100%;
-  overflow: hidden;
-}
-.hero img, .hero-img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-/* Testimonial images: small round avatars */
-img[src*="/testimonials/"],
-img.testimonial-avatar,
-.testimonial img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 9999px;
-  display: inline-block;
-}
-
-/* Gallery / project / product images — don't overflow their card */
-.card img, .gallery img, .project img, img.block-img {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-/* Placeholder image styling if used */
-.placeholder-img, img[src*="placeholder"] {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  opacity: 0.98;
-}
-
-/* If your build uses next/image wrapper classes (sometimes rendered as .next-image) */
-.next-img, .next-image, .next-image img {
-  width: 100% !important;
-  height: auto !important;
-  object-fit: cover !important;
-}
-
-/* Buttons/icons containing small inline images (keeps line-height correct) */
-.btn img, .link img {
-  height: 1em;
-  width: auto;
-  vertical-align: -0.125em;
-}
-
-/* Accessibility hint: decorative images without alt should be ignored by AT */
-img[alt=""] {
-  role: presentation;
-}
-
-/* Very small debug helper (uncomment in dev only)
-.img-outline { outline: 1px dashed rgba(255,0,0,0.4); }
-*/
-
-/* End appended image fixes */
