@@ -2,22 +2,14 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  // 👇 ensures Next.js exports all pages with relative paths
-  output: 'export',
-  trailingSlash: true,
-
-  // 👇 fix for static images & CSS on vercel
+  // Let Vercel/Next handle static assets under /_next (do NOT use assetPrefix './' here)
+  // Remove 'output: "export"' so Next.js performs the normal build (recommended on Vercel)
   images: {
     unoptimized: true,
   },
 
-  // 👇 this tells Next.js where your static files (like /public) are
-  assetPrefix: './',
-  basePath: '',
-
-  // 👇 optional optimization off for smoother exports
-  distDir: 'out',
+  // keep trailingSlash if you prefer (can be true or false). Use false to follow Next defaults.
+  trailingSlash: false,
 };
 
 module.exports = nextConfig;
-
