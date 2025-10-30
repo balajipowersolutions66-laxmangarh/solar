@@ -42,3 +42,9 @@ coverage/
 
 # keep a placeholder so folder is not empty (optional)
 !.gitkeep
+
+# Ignore build and static export folders
+.next/
+out/
+out-backup/
+*.html
