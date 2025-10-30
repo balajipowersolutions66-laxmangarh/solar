@@ -1,15 +1,13 @@
+// next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-
-  // Let Vercel/Next handle static assets under /_next (do NOT use assetPrefix './' here)
-  // Remove 'output: "export"' so Next.js performs the normal build (recommended on Vercel)
-  images: {
-    unoptimized: true,
-  },
-
-  // keep trailingSlash if you prefer (can be true or false). Use false to follow Next defaults.
-  trailingSlash: false,
+  // Remove any assetPrefix or basePath that tries to make _next paths relative.
+  // Keep default Next behavior so Vercel serves /_next/static correctly.
+  // If you had exportTrailingSlash / output: 'export' before, revert to normal
+  // serverless/standalone build for Vercel:
+  output: undefined,
+  // If you previously added `assetPrefix: './'` or similar, DO NOT include it here.
 };
 
 module.exports = nextConfig;
