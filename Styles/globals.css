@@ -10,20 +10,70 @@
   --yellow: #facc15;
 }
 
-/* Make all images responsive and keep aspect ratio by default.
-   This is safe: it won't change your visual theme or text. */
-img {
-  max-width: 100%;
-  height: auto !important;    /* important to override inline width-only or height-only changes */
-  display: block;
-  object-fit: cover;          /* fallback; many images intentionally use object-fit in layout */
+/* ------------------------------------------------------------------
+   GLOBAL IMAGE / ASSET FIXES
+   - ensures images keep aspect ratio when width/height adjusted by CSS
+   - avoids Next.js "width or height modified" warnings
+   - fixes flicker / missing layout by making images block-level and responsive
+   ------------------------------------------------------------------ */
+
+/* Ensure all images behave predictably by default */
+img,
+picture,
+svg {
+  display: block;             /* remove inline whitespace surprises */
+  max-width: 100%;            /* never overflow container */
+  height: auto !important;    /* preserve aspect ratio */
+  width: auto;                /* allow natural width when possible */
+  object-fit: contain;        /* preserve image inside its box */
 }
 
-/* Keep Next.js image wrappers from collapsing / causing layout shift */
-img[decoding] {
-  /* next/image outputs an <img decoding="async"> — ensure it behaves */
+/* When author intends full-bleed / cover images they use .hero-img class */
+.hero-img {
+  width: 100% !important;
+  height: 85vh !important;
+  object-fit: cover !important;
+  opacity: 1 !important;
+  animation: heroZoom 20s ease-in-out infinite;
+  transition: transform 1.5s ease, filter 1.5s ease;
+  filter: brightness(1) saturate(1.05);
+  display: block;             /* keeps layout stable */
+}
+
+/* Defensive rule for Next/Image placeholder: ensure the wrapper doesn't collapse */
+#__next img {
+  display: block;
+}
+
+/* Brand / logos carousel: keep height controlled and aspect ratio preserved */
+.brands img,
+.brand img,
+.swiper-slide img,
+.card img,
+.h-14 img {
   width: auto !important;
+  max-width: 100%;
   height: auto !important;
+  object-fit: contain !important;
+  display: block;
+}
+
+/* If you want consistent small logo heights (eg header logos) */
+.header-logo,
+.brand-logo,
+.h-14 {
+  height: 44px;       /* default header logo height */
+  line-height: 44px;
+  display: inline-block;
+}
+
+/* For image placeholders (fallbacks) — keep them visible and not zero-size */
+.placeholder,
+.img-fallback {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
 }
 
 /* --- HERO SECTION --- */
@@ -34,18 +84,7 @@ img[decoding] {
   background: #000;
 }
 
-/* Hero background images — full-width, keep aspect ratio and smooth zoom */
-.hero-img {
-  width: 100%;
-  height: 85vh;
-  object-fit: cover;
-  opacity: 1 !important;
-  animation: heroZoom 20s ease-in-out infinite;
-  transition: transform 1.5s ease, filter 1.5s ease;
-  filter: brightness(1) saturate(1.05);
-}
-
-/* Gentle zoom animation */
+/* Gentle zoom animation (hero) */
 @keyframes heroZoom {
   0%, 100% {
     transform: scale(1);
@@ -91,7 +130,7 @@ img[decoding] {
   z-index: 10;
 }
 
-/* Slider text styling */
+/* ✅ Slider text styling */
 .hero-slider-text {
   color: var(--parrot);
   font-weight: 700;
@@ -99,7 +138,7 @@ img[decoding] {
   font-size: clamp(1rem, 2vw, 1.4rem);
 }
 
-/* Get Quote Button */
+/* ✅ Get Quote Button */
 .hero-quote-btn {
   background: var(--emerald);
   color: white;
@@ -117,40 +156,7 @@ img[decoding] {
   transform: scale(1.05);
 }
 
-/* --- Logos, brand icons, thumbnails --- */
-/* Many places display small logos; keep their height fixed and width auto to prevent distortion. */
-.brand img,
-.brands img,
-.carousel img,
-.logo img,
-img.brand-logo,
-img.object-contain {
-  height: auto !important;
-  max-height: 60px;      /* keep logos visually small and consistent */
-  width: auto !important;
-  object-fit: contain;
-  display: inline-block;
-}
-
-/* Utility override for classes that were resizing only one dimension */
-.h-14, .h-12, .h-16 {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.h-14 img, .h-12 img, .h-16 img {
-  max-height: 56px;
-  width: auto !important;
-}
-
-/* Cards (projects) — keep fixed card height but image inside should keep aspect ratio */
-.card img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-}
-
-/* --- General sections and typography --- */
+/* --- GENERAL SECTIONS --- */
 .section-heading {
   color: var(--emerald);
   font-weight: 800;
@@ -165,12 +171,19 @@ img.object-contain {
   color: var(--emerald);
 }
 
-/* --- Prevent flicker on images that are loaded by JS (placeholder fallback) --- */
-img[src$="placeholder.jpg"],
-img[alt="placeholder"] {
+/* Cards, logos, etc. Keep card images consistent */
+.card img {
+  width: 100%;
+  height: 220px;
   object-fit: cover;
-  width: auto !important;
-  height: auto !important;
+  display: block;
+}
+
+/* Slight saturation for small header images */
+.h-14 {
+  filter: saturate(1.1);
+  opacity: 0.95;
+  display: inline-block;
 }
 
 /* --- RESPONSIVE --- */
@@ -179,18 +192,13 @@ img[alt="placeholder"] {
     height: 70vh;
   }
   .hero-img {
-    height: 70vh;
+    height: 70vh !important;
   }
   .hero-title-top h1 {
     font-size: 1.8rem;
   }
   .hero-title-top p {
     font-size: 1rem;
-  }
-  .brand img,
-  .brands img,
-  img.brand-logo {
-    max-height: 48px;
   }
 }
 
