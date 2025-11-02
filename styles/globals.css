@@ -273,4 +273,25 @@ svg {
     max-width: 220px;
   }
 }
+/* ===== Hero & thumbnail tweaks for Option 3 ===== */
+
+/* Gentle Ken Burns zoom on visible hero slides */
+.hero-img {
+  transition: transform 18s ease, opacity 1.2s ease;
+  transform-origin: center;
+}
+.swiper-slide-active .hero-img {
+  transform: scale(1.05);
+}
+
+/* Thumbnails look & active state */
+.thumbs-swiper .thumb-item img {
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+.thumbs-swiper .swiper-slide-thumb-active .thumb-item {
+  border-color: var(--parrot);
+  transform: scale(1.03);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+.thumb-item { border-radius: 8px; overflow: hidden; }
 
