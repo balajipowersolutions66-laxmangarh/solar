@@ -77,25 +77,25 @@ export default function Home() {
             loop
             thumbs={{ swiper: thumbsSwiper }}
             className="relative"
-            style={{ height: "85vh" }}
           >
             {heroImages.map((src, idx) => (
               <SwiperSlide key={idx}>
-                <div className="relative w-full h-[85vh]">
+                <div className="relative w-full h-[60vh] sm:h-[75vh] md:h-[85vh]">
                   <img
                     src={src}
                     alt={`hero-${idx}`}
-                    className="w-full h-full object-cover hero-img"
+                    className="w-full h-full object-cover object-center hero-img"
                     onError={(e) => (e.target.src = "/hero/hero1.jpg")}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/40 to-black/60" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/35 to-black/60" />
                   {/* Overlay content (title + tagline + CTA) */}
                   <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6">
-                    <div className="hero-title-top mt-[-8vh]">
-                      <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                    <div className="hero-title-top -mt-8">
+                      {/* responsive title sizes: smaller on phones so it won't be cut */}
+                      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white mb-1 leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
                         Shri Balaji Power Solutions
                       </h1>
-                      <p className="text-lg md:text-2xl font-semibold text-green-400 drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
+                      <p className="text-sm sm:text-lg md:text-2xl font-semibold text-green-400 drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]">
                         The Promising Future of Solar Energy
                       </p>
                     </div>
@@ -107,7 +107,10 @@ export default function Home() {
                       >
                         {taglines[currentTagline]}
                       </p>
-                      <a href="/contact" className="hero-quote-btn animate-pulseGlow">
+                      <a
+                        href="/contact"
+                        className="hero-quote-btn animate-pulseGlow inline-block px-6 py-3 rounded-full bg-emerald-800 text-white shadow-lg"
+                      >
                         Get a Free Quote
                       </a>
                     </div>
@@ -141,7 +144,7 @@ export default function Home() {
                     <img
                       src={src}
                       alt={`thumb-${idx}`}
-                      className="w-full h-20 object-cover"
+                      className="w-full h-20 object-cover object-center"
                       onError={(e) => (e.target.src = "/hero/hero1.jpg")}
                     />
                   </div>
